@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DEKOREET - AI Mobilya Tasarımı</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@200;300;400;500;600;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <!-- Auth Modal -->
+    <div id="auth-modal" class="modal hidden">
+        <div class="modal-content">
+            <button class="close-btn" onclick="toggleAuthModal(false)"><i class="fa-solid fa-xmark fa-xl"></i></button>
+            <div class="modal-header">
+                <h2>Hoş Geldiniz</h2>
+                <p class="modal-subtitle">Tasarım yolculuğunuza başlayın</p>
+            </div>
+
+            <div class="social-login">
+                <button class="google-btn" onclick="loginSim('Google')">
+                    <svg class="google-logo" viewBox="0 0 48 48">
+                        <path fill="#EA4335"
+                            d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z">
+                        </path>
+                        <path fill="#4285F4"
+                            d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z">
+                        </path>
+                        <path fill="#FBBC05"
+                            d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24s.92 7.54 2.56 10.78l7.97-6.19z">
+                        </path>
+                        <path fill="#34A853"
+                            d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z">
+                        </path>
+                    </svg>
+                    Google ile Devam Et
+                </button>
+            </div>
+
+            <div class="divider"><span>veya e-posta ile</span></div>
+
+            <div class="email-login">
+                <div class="input-group">
+                    <label>E-posta</label>
+                    <input type="email" placeholder="E-posta Adresiniz" id="email-input">
+                </div>
+                <div class="input-group">
+                    <label>Şifre</label>
+                    <input type="password" placeholder="Şifre" id="pass-input">
+                </div>
+                <button class="btn btn-primary" onclick="loginSim('Email')">Giriş Yap</button>
+            </div>
+            <p class="modal-footer-text">Hesabın yok mu? <a href="#">Kayıt Ol</a></p>
+        </div>
+    </div>
+
+    <!-- Video Prompt Modal -->
+    <div id="video-prompt-modal" class="modal hidden">
+        <div class="modal-content">
+            <button class="close-btn" onclick="toggleVideoPromptModal(false)"><i
+                    class="fa-solid fa-xmark fa-xl"></i></button>
+            <h2><i class="fa-solid fa-video"></i> Video İçeriğini Tanımlayın</h2>
+            <p class="modal-subtitle">Videonuzun nasıl görünmesini istediğinizi açıklayın</p>
+
+            <textarea id="video-prompt"
+                placeholder="Örnek: Kamera yavaşça sola dönsün, mobilyanın etrafında 360 derece hareket etsin, yumuşak ışıklandırma olsun..."></textarea>
+            <button class="btn btn-primary" onclick="generateVideoWithPrompt()">
+                <i class="fa-solid fa-wand-magic-sparkles"></i> Video Oluştur
+            </button>
+        </div>
+    </div>
+
+    <nav class="navbar">
+        <div class="logo">
+            <i class="fa-solid fa-shapes text-accent"></i> DEKOREET
+        </div>
+        <div class="nav-links">
+            <div class="lang-selector">
+                <i class="fa-solid fa-globe"></i>
+                <select id="language-select">
+                    <option value="tr">TR</option>
+                    <option value="en">EN</option>
+                    <option value="de">DE</option>
+                </select>
+            </div>
+            <a href="#features" id="nav-features">Özellikler</a>
+            <a href="#pricing" id="nav-pricing">Fiyatlandırma</a>
+            <button class="auth-btn" onclick="toggleAuthModal(true)" id="nav-auth-btn">Giriş Yap</button>
+        </div>
+    </nav>
+
+    <main class="container">
+
+        <!-- Landing Section (Visible before login) -->
+        <div id="section-landing">
+            <header class="hero landing-hero">
+                <h1 id="hero-title">Hayal Et. Yükle. Dönüştür.</h1>
+                <p id="hero-desc">Mobilya fotoğraflarınızı yapay zeka ile profesyonel yaşam alanı görsellerine
+                    dönüştürün. Saniyeler
+                    içinde etkileyici sonuçlar.</p>
+                <div class="hero-actions">
+                    <button class="btn btn-cta" onclick="toggleAuthModal(true)">
+                        <span id="hero-cta-text">Hemen Başla</span> <i class="fa-solid fa-arrow-right"></i>
+                    </button>
+                </div>
+            </header>
+
+            <!-- Features Section -->
+            <section class="features" id="features">
+                <div class="feature-card">
+                    <div class="feature-info">
+                        <div class="feature-icon"><i class="fa-solid fa-bolt"></i></div>
+                        <h3 id="feat-1-title">Anında Dönüşüm</h3>
+                        <p id="feat-1-desc">Mobilyalarınızı saniyeler içinde yaşam alanlarına yerleştirin.</p>
+                    </div>
+                    <div class="feature-gallery">
+                        <img src="https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=400" alt="Modern Sofa 1">
+                        <img src="https://images.unsplash.com/photo-1493663284031-b7e3aefcae8e?w=400"
+                            alt="Modern Sofa 2">
+                        <img src="https://images.unsplash.com/photo-1540574163026-643ea20ade25?w=400"
+                            alt="Modern Sofa 3">
+                    </div>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-info">
+                        <div class="feature-icon"><i class="fa-solid fa-brain"></i></div>
+                        <h3 id="feat-2-title">Akıllı Sahne</h3>
+                        <p id="feat-2-desc">Stüdyo kalitesinde ışıklandırma ve profesyonel kompozisyon.</p>
+                    </div>
+                    <div class="feature-gallery">
+                        <img src="https://images.unsplash.com/photo-1567016432779-094069958ea5?w=400" alt="Corner Sofa">
+                        <img src="https://images.unsplash.com/photo-1493663284031-b7e3aefcae8e?w=400" alt="Modern Sofa">
+                        <img src="https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=400"
+                            alt="Modern Chair">
+                    </div>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-info">
+                        <div class="feature-icon"><i class="fa-solid fa-layer-group"></i></div>
+                        <h3 id="feat-3-title">Çoklu Varyasyon</h3>
+                        <p id="feat-3-desc">Farklı mekanlarda modern mobilya tarzlarını deneyimleyin.</p>
+                    </div>
+                    <div class="feature-gallery">
+                        <img src="https://images.unsplash.com/photo-1524758631624-e2822e304c36?w=400"
+                            alt="Living Room Variation">
+                        <img src="https://images.unsplash.com/photo-1493663284031-b7e3aefcae8e?w=400"
+                            alt="Modern Berjer">
+                        <img src="https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?w=400"
+                            alt="Modern Lounge">
+                    </div>
+                </div>
+            </section>
+
+            <!-- Example Studies Showcase -->
+            <section class="seasonal-showcase">
+                <h2 class="section-title">Yapay Zeka ile Hayalinizdeki Mekânı Yaratın</h2>
+                <div class="seasonal-grid">
+                    <!-- Column 1: Beige Modern Corner Sofa Collection -->
+                    <div class="showcase-card">
+                        <img src="furniture1.png" class="showcase-img active" alt="Modern Sofa 1">
+                        <img src="set1_var2.png" class="showcase-img" alt="Modern Sofa 2">
+                        <img src="set1_var3.png" class="showcase-img" alt="Modern Sofa 3">
+                        <img src="set1_var4.png" class="showcase-img" alt="Modern Sofa 4">
+                        <img src="set1_var5.png" class="showcase-img" alt="Modern Sofa 5">
+                    </div>
+
+                    <!-- Column 2: White Curved Sofa Collection -->
+                    <div class="showcase-card">
+                        <img src="furniture2.png" class="showcase-img active" alt="Modern Set 1">
+                        <img src="set2_var2.png" class="showcase-img" alt="Modern Set 2">
+                        <img src="set2_var3.png" class="showcase-img" alt="Modern Set 3">
+                        <img src="furniture2.png" class="showcase-img" alt="Modern Set 4">
+                        <img src="set2_var2.png" class="showcase-img" alt="Modern Set 5">
+                    </div>
+
+                    <!-- Column 3: Cream Sofa Collection -->
+                    <div class="showcase-card">
+                        <img src="furniture3.jpg" class="showcase-img active" alt="Living Room 1">
+                        <img src="furniture3.jpg" class="showcase-img" alt="Living Room 2">
+                        <img src="furniture3.jpg" class="showcase-img" alt="Living Room 3">
+                        <img src="furniture3.jpg" class="showcase-img" alt="Living Room 4">
+                        <img src="furniture3.jpg" class="showcase-img" alt="Living Room 5">
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- Workspace Section (Visible after login) -->
+        <div id="section-workspace" class="hidden">
+            <div class="workspace-top-bar">
+                <div class="user-nav">
+                    <div class="credit-badge" id="workspace-credits">0 Credits</div>
+                    <button class="top-nav-btn" id="workspace-upgrade"><i class="fa-solid fa-bolt"></i> Upgrade</button>
+                    <button class="top-nav-btn" id="workspace-myimages"><i class="fa-solid fa-images"></i> My
+                        Images</button>
+                    <button class="top-nav-btn" onclick="logoutSim()" id="workspace-signout"><i
+                            class="fa-solid fa-right-from-bracket"></i> Sign Out</button>
+                </div>
+            </div>
+
+            <div class="workspace-intro">
+                <p id="ws-intro-text">DEKOREET uses advanced AI to help furniture sellers create beautiful lifestyle
+                    images instantly.
+                    Upload a product photo and get professional-quality lifestyle scenes in seconds.</p>
+            </div>
+
+            <div class="workspace-card-new">
+                <div class="panel-left">
+                    <h3 class="panel-title" id="ws-upload-panel-title">Product Image</h3>
+                    <div class="upload-container" id="drop-zone">
+                        <div class="upload-inner">
+                            <i class="fa-solid fa-cloud-arrow-up"></i>
+                            <h4 id="ws-upload-h4">Upload a furniture image</h4>
+                            <p id="ws-upload-p">Drag and drop or click to browse</p>
+                            <button class="btn-upload-file" id="ws-upload-btn"
+                                onclick="document.getElementById('file-input').click()">Upload Image</button>
+                            <input type="file" id="file-input" accept="image/*" hidden>
+                        </div>
+                    </div>
+                    <div class="preview-area hidden" id="preview-area" style="margin-top: 20px;">
+                        <div class="preview-header">
+                            <span>Görsel Önizlemesi</span>
+                            <button onclick="clearPreview()" class="close-btn"><i
+                                    class="fa-solid fa-xmark"></i></button>
+                        </div>
+                        <img id="input-preview" src="" alt="Önizleme">
+                    </div>
+                </div>
+
+                <div class="panel-right">
+                    <div class="panel-header-row">
+                        <h3 class="panel-title" id="ws-prompt-title">Prompt</h3>
+                        <div class="video-toggle-container">
+                            <span id="ws-video-mode-label">Video Mode</span>
+                            <label class="switch">
+                                <input type="checkbox" id="video-mode-checkbox">
+                                <span class="slider round"></span>
+                            </label>
+                            <button class="icon-action-btn"><i class="fa-regular fa-copy"></i></button>
+                        </div>
+                    </div>
+
+                    <textarea id="ai-prompt" placeholder="Upload an image to generate a prompt..."></textarea>
+
+                    <div class="info-alert-box">
+                        <div class="info-icon"><i class="fa-solid fa-lightbulb"></i></div>
+                        <p id="ws-info-desc">A detailed environment prompt will be automatically generated when you
+                            upload a furniture
+                            image. For example: "a modern living room with tall potted plants, abstract wall art, and a
+                            geometric rug"</p>
+                    </div>
+
+                    <button class="btn-generate-lifestyle" onclick="generateRoom()" id="ws-generate-btn">
+                        Generate Lifestyle Images
+                    </button>
+
+                    <div class="extra-actions">
+                        <a href="#" class="see-examples-link" id="ws-examples-link"><i
+                                class="fa-solid fa-lightbulb"></i> See Examples</a>
+                    </div>
+
+                    <div id="loader" class="loader hidden">
+                        <div class="spinner"></div>
+                        <p id="loading-text">İşleniyor...</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Result Section -->
+        <section class="results hidden" id="results-section">
+            <div class="card result-card">
+                <div class="result-actions-bar">
+                    <div class="result-label"><i class="fa-solid fa-wand-magic-sparkles"></i> Tasarım Önizleme</div>
+                    <div class="button-group">
+                        <button class="btn btn-video-generate-premium" onclick="toggleVideoPromptModal(true)">
+                            <i class="fa-solid fa-film"></i> Profesyonel Video Oluştur
+                        </button>
+                        <button class="btn btn-save" onclick="downloadResult()"><i class="fa-solid fa-download"></i>
+                            İNDİR</button>
+                        <button class="btn btn-new" onclick="clearPreview()"><i class="fa-solid fa-plus"></i> YENİ
+                            TASARIM</button>
+                    </div>
+                </div>
+
+                <div class="canvas-wrapper">
+                    <canvas id="result-canvas" class="result-media"></canvas>
+                    <div id="video-container" class="video-container hidden">
+                        <div class="video-scroller" id="video-scroller"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        </div>
+
+        <!-- Pricing Section -->
+        <section class="pricing-section" id="pricing">
+            <h2 class="section-title" id="pricing-title">Pricing</h2>
+            <div class="pricing-grid">
+                <div class="pricing-card">
+                    <div class="plan-header">
+                        <h3 id="plan-free-title">Ücretsiz</h3>
+                        <div class="price">€0<span class="price-suffix" id="plan-free-sub">/ deneme</span></div>
+                    </div>
+                    <ul class="plan-features">
+                        <li id="plan-free-f1"><i class="fa-solid fa-check"></i> 1 Resimlik Deneme</li>
+                        <li id="plan-free-f2"><i class="fa-solid fa-check"></i> Standart Kalite</li>
+                        <li id="plan-free-f3"><i class="fa-solid fa-check"></i> Filigranlı</li>
+                    </ul>
+                    <button class="btn btn-outline" id="plan-free-btn" onclick="redirectToStripe('free')">HEMEN
+                        DENE</button>
+                </div>
+
+                <div class="pricing-card">
+                    <div class="plan-header">
+                        <h3 id="plan-starter-title">Başlangıç</h3>
+                        <div class="price">€179<span class="price-suffix">/ay</span></div>
+                    </div>
+                    <ul class="plan-features">
+                        <li id="plan-starter-f1"><i class="fa-solid fa-check"></i> 50 Kredi</li>
+                        <li id="plan-starter-f2"><i class="fa-solid fa-check"></i> HD Kalite</li>
+                        <li id="plan-starter-f3"><i class="fa-solid fa-check"></i> Filigransız</li>
+                    </ul>
+                    <button class="btn btn-outline" id="plan-starter-btn" onclick="redirectToStripe('starter')">ABONE
+                        OL</button>
+                </div>
+
+                <div class="pricing-card popular">
+                    <div class="plan-header">
+                        <div class="popular-badge" id="popular-badge">En Çok Tercih Edilen</div>
+                        <h3 id="plan-popular-title">Popüler Paket</h3>
+                        <div class="price">€299<span class="price-suffix">/ay</span></div>
+                    </div>
+                    <ul class="plan-features">
+                        <li id="plan-popular-f1"><i class="fa-solid fa-check"></i> 100 Kredi</li>
+                        <li id="plan-popular-f2"><i class="fa-solid fa-check"></i> Ultra HD 4K</li>
+                        <li id="plan-popular-f3"><i class="fa-solid fa-check"></i> Video Oluşturma</li>
+                        <li id="plan-popular-f4"><i class="fa-solid fa-check"></i> 7/24 Destek</li>
+                    </ul>
+                    <button class="btn btn-outline" id="plan-popular-btn"
+                        onclick="redirectToStripe('popular')">PROFESYONEL ÜYELİK</button>
+                </div>
+
+                <div class="pricing-card">
+                    <div class="plan-header">
+                        <h3 id="plan-premium-title">Premium Paket</h3>
+                        <div class="price">€699<span class="price-suffix">/ay</span></div>
+                    </div>
+                    <ul class="plan-features">
+                        <li id="plan-premium-f1"><i class="fa-solid fa-check"></i> 300 Kredi</li>
+                        <li id="plan-premium-f2"><i class="fa-solid fa-check"></i> Kurumsal API</li>
+                        <li id="plan-premium-f3"><i class="fa-solid fa-check"></i> Çoklu Kullanıcı</li>
+                        <li id="plan-premium-f4"><i class="fa-solid fa-check"></i> VIP Destek</li>
+                    </ul>
+                    <button class="btn btn-outline" id="plan-premium-btn" onclick="redirectToStripe('premium')">SATIN
+                        AL</button>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <script src="app.js"></script>
+    <script src="showcase-animation.js"></script>
+</body>
+
+</html>

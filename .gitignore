@@ -1,0 +1,11 @@
+# System files
+Thumbs.db
+Desktop.ini
+.DS_Store
+
+# Logs
+*.log
+
+# Dependency directories
+node_modules/
+bower_components/
