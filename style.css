@@ -1,29 +1,28 @@
-@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@700;900&display=swap');
+﻿@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@700;900&display=swap');
 
 /* Global Styles */
 :root {
-    /* Dark Blue Theme Palette */
-    --bg-color: #0a192f;
-    /* Deep Navy Blue */
-    --card-bg: #112240;
-    /* Dark Slate Blue */
-    --card-border: #233554;
-    /* Lighter Slate Border */
+    /* Purple/Pink Theme Palette */
+    --bg-color: #0F0518;
+    /* Deep Purple Black */
+    --card-bg: rgba(15, 5, 24, 0.85);
+    /* Darker, more opaque background */
+    --card-border: rgba(218, 0, 255, 0.3);
+    /* Slightly more prominent pink border */
 
     --text-primary: #ffffff;
-    /* Pure White */
-    --text-secondary: #8892b0;
-    /* Light Blue-Grey */
+    --text-secondary: #ffffff;
+    /* Set to white as requested */
 
-    --accent-color: #64ffda;
-    /* Electric Blue / Cyan */
-    --accent-hover: #4cc9ac;
-    /* Slightly darkercyan for hover */
+    --accent-color: #DA00FF;
+    /* Hot Pink/Magenta */
+    --accent-hover: #b000ce;
+
+    --gradient-primary: linear-gradient(135deg, #DA00FF, #7000FF);
 
     --font-main: 'Outfit', sans-serif;
     --font-logo: 'Cinzel', serif;
-    /* Striking serif for logo */
-    --border-radius: 12px;
+    --border-radius: 20px;
 }
 
 * {
@@ -40,6 +39,15 @@ body {
     min-height: 100vh;
     overflow-x: hidden;
     line-height: 1.6;
+}
+
+#shader-background {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -10;
 }
 
 /* Navbar */
@@ -72,6 +80,16 @@ body {
 .logo img {
     height: 40px;
     width: auto;
+}
+
+.logo-suffix {
+    font-family: 'Outfit', sans-serif;
+    /* Back to sans or a cursive font if available */
+    font-style: italic;
+    font-weight: 300;
+    color: var(--accent-color);
+    /* text-transform: lowercase; Removed to allow "ET" uppercase */
+    margin-left: 2px;
 }
 
 .nav-links {
@@ -113,7 +131,7 @@ body {
 }
 
 .nav-links a {
-    color: var(--text-secondary);
+    color: #fff;
     text-decoration: none;
     font-weight: 500;
     transition: color 0.2s;
@@ -122,12 +140,13 @@ body {
 
 .nav-links a:hover,
 .nav-links a.active {
-    color: var(--text-primary);
+    color: #fff;
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
 }
 
 .auth-btn {
     background: linear-gradient(135deg, var(--accent-color), #2dd4bf);
-    color: #0a192f;
+    color: #fff;
     padding: 0.6rem 1.4rem;
     border-radius: 25px;
     font-weight: 700;
@@ -149,96 +168,253 @@ body {
     padding: 2rem;
 }
 
-/* Hero */
-.hero {
+/* Hero & Showcase */
+.landing-hero {
     text-align: center;
-    margin: 4rem 0 6rem;
+    padding-top: 4rem;
+    padding-bottom: 2rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3rem;
+}
+
+.hero-text-content {
+    max-width: 800px;
+    margin: 0 auto;
 }
 
 .landing-hero h1 {
-    font-size: 4rem;
-    font-weight: 800;
-    margin-bottom: 1.5rem;
+    font-family: var(--font-main);
+    font-size: 3.5rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
     line-height: 1.2;
-    letter-spacing: -1px;
+    background: linear-gradient(to right, #ffffff, #a5b4fc);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
 }
 
 .landing-hero p {
-    font-size: 1.25rem;
+    font-size: 1.1rem;
     color: var(--text-secondary);
-    max-width: 800px;
-    margin: 0 auto 3rem;
     font-weight: 300;
 }
 
-.btn-cta {
-    background: linear-gradient(135deg, var(--accent-color), #2dd4bf);
-    color: #0a192f;
-    padding: 1.2rem 2.5rem;
-    font-size: 1.1rem;
-    border-radius: 50px;
-    font-weight: 700;
-    display: inline-flex;
-    align-items: center;
-    gap: 10px;
-    border: none;
-    cursor: pointer;
-    transition: transform 0.3s, box-shadow 0.3s;
-    box-shadow: 0 8px 24px rgba(100, 255, 218, 0.4);
+/* Hero Cards */
+.hero-showcase-cards {
+    display: flex;
+    justify-content: center;
+    gap: 1.5rem;
+    flex-wrap: nowrap;
+    /* Force side-by-side */
+    width: 100%;
+    max-width: 1400px;
+    padding: 0 2rem;
+    overflow-x: auto;
+    /* Allow scroll if screen is too small */
+
+    /* Hide scrollbar */
+    scrollbar-width: none;
+    /* Firefox */
+    -ms-overflow-style: none;
+    /* IE/Edge */
 }
 
-.btn-cta:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 12px 32px rgba(100, 255, 218, 0.6);
+.hero-showcase-cards::-webkit-scrollbar {
+    display: none;
+    /* Chrome, Safari, Opera */
 }
 
-/* Features */
-.features {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-    gap: 2rem;
-    margin-bottom: 6rem;
-}
-
-.feature-card {
-    background: var(--card-bg);
-    border: 1px solid var(--card-border);
-    border-radius: var(--border-radius);
-    padding: 2rem;
+.hero-card {
+    position: relative;
+    flex: 0 0 350px;
+    /* Fixed width but flexible context */
+    height: 550px;
+    border-radius: 20px;
+    overflow: hidden;
+    background: #000;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    transition: transform 0.4s ease, border-color 0.4s ease;
     display: flex;
     flex-direction: column;
+}
+
+.hero-card:hover {
+    transform: translateY(-10px);
+    border-color: rgba(255, 255, 255, 0.3);
+}
+
+.card-image-container {
+    flex: 1;
+    position: relative;
+    overflow: hidden;
+}
+
+.carousel-track {
+    display: flex;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    transition: opacity 1s ease-in-out;
+    /* We will manipulate opacity of children or background images for fade */
+}
+
+.carousel-track img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0;
+    transition: opacity 1.5s ease-in-out;
+}
+
+.carousel-track img.active {
+    opacity: 1;
+    z-index: 1;
+}
+
+
+/* New Hero Actions */
+.hero-actions-new {
+    display: flex;
     gap: 1.5rem;
+    margin-top: 1rem;
+}
+
+.btn-primary-glow {
+    background: var(--gradient-primary);
+    color: #fff;
+    padding: 1rem 2.5rem;
+    border-radius: 50px;
+    font-weight: 700;
+    font-size: 1.1rem;
+    border: none;
+    cursor: pointer;
+    box-shadow: 0 0 20px rgba(218, 0, 255, 0.4);
     transition: transform 0.3s;
 }
 
-.feature-card:hover {
-    transform: translateY(-10px);
+.btn-primary-glow:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 30px rgba(218, 0, 255, 0.6);
 }
 
-.feature-icon {
+.btn-primary-dark {
+    background: linear-gradient(135deg, #a000cc, #5000cc);
+    /* Darker version of primary gradient */
+    color: #fff;
+    padding: 1rem 2.5rem;
+    border-radius: 50px;
+    font-weight: 700;
+    font-size: 1.1rem;
+    border: none;
+    cursor: pointer;
+    box-shadow: 0 0 20px rgba(160, 0, 204, 0.3);
+    transition: transform 0.3s;
+}
+
+.btn-primary-dark:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 30px rgba(160, 0, 204, 0.5);
+}
+
+.btn-secondary-outline {
+    background: transparent;
+    color: #fff;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    padding: 1rem 2.5rem;
+    border-radius: 50px;
+    font-weight: 600;
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.btn-secondary-outline:hover {
+    border-color: #fff;
+    background: rgba(255, 255, 255, 0.1);
+}
+
+/* Transformation Demo */
+.transformation-demo {
+    margin-top: 4rem;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
+    padding: 2rem 4rem;
+    display: flex;
+    align-items: center;
+    gap: 3rem;
+    max-width: 1000px;
+}
+
+.demo-phase h3 {
+    text-align: center;
+    margin-bottom: 1rem;
+    color: var(--text-secondary);
+    font-size: 1.2rem;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+.before-grid {
+    display: flex;
+    gap: 1rem;
+}
+
+.mini-item {
+    width: 80px;
+    height: 80px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 12px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    font-size: 0.7rem;
+    color: var(--text-secondary);
+    gap: 5px;
+}
+
+.mini-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 10px;
+}
+
+.placeholder-icon {
+    font-size: 1.5rem;
+    color: rgba(255, 255, 255, 0.5);
+}
+
+.demo-arrow {
     font-size: 2rem;
     color: var(--accent-color);
-    margin-bottom: 0.5rem;
 }
 
-.feature-gallery {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 0.8rem;
+.after-showcase {
+    width: 300px;
+    height: 180px;
+    border-radius: 12px;
+    overflow: hidden;
+    border: 2px solid var(--accent-color);
+    box-shadow: 0 0 20px rgba(218, 0, 255, 0.2);
 }
 
-.feature-gallery img {
+.after-showcase img {
     width: 100%;
-    aspect-ratio: 1;
+    height: 100%;
     object-fit: cover;
-    border-radius: 8px;
-    background: #1e293b;
-}
-
-/* Seasonal Showcase Section */
-.seasonal-showcase {
-    margin-bottom: 8rem;
-    text-align: center;
 }
 
 .section-title {
@@ -331,12 +507,15 @@ body {
 
 .workspace-card-new {
     background: var(--card-bg);
+    /* Use the updated dark opaque background */
+    backdrop-filter: blur(15px);
+    /* Stronger blur for separation */
     border: 1px solid var(--card-border);
     border-radius: 20px;
     display: flex;
     padding: 2.5rem;
     gap: 3rem;
-    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 30px 60px rgba(0, 0, 0, 0.5);
 }
 
 .panel-left,
@@ -405,7 +584,8 @@ body {
 #ai-prompt {
     width: 100%;
     height: 150px;
-    background: rgba(0, 0, 0, 0.2);
+    background: rgba(0, 0, 0, 0.5);
+    /* Much darker background for input field */
     border: 1.5px solid var(--card-border);
     border-radius: 12px;
     padding: 1.25rem;
@@ -708,11 +888,28 @@ input:checked+.slider:before {
 }
 
 .pricing-card {
-    background: var(--card-bg);
-    border: 1px solid var(--card-border);
+    background: rgba(15, 5, 24, 0.9);
+    /* Almost solid background for pricing */
+    backdrop-filter: blur(15px);
+    border: 1px solid rgba(218, 0, 255, 0.4);
     border-radius: 16px;
     padding: 2.5rem;
     text-align: center;
+}
+
+.pricing-card h3 {
+    font-size: 1.5rem;
+    color: #fff;
+    margin-bottom: 0.5rem;
+}
+
+.plan-features li {
+    color: #fff;
+    margin-bottom: 0.8rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
 }
 
 .pricing-card .btn-outline {
@@ -792,4 +989,70 @@ input:checked+.slider:before {
     .seasonal-card {
         height: 350px;
     }
+}
+
+/* Examples Section */
+#examples-section {
+    padding: 4rem 2rem;
+    text-align: center;
+    background: rgba(255, 255, 255, 0.02);
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    margin-top: 4rem;
+}
+
+#examples-section h2 {
+    font-size: 2.5rem;
+    margin-bottom: 2rem;
+    color: var(--text-primary);
+}
+
+.examples-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+.example-item {
+    border-radius: 12px;
+    overflow: hidden;
+    position: relative;
+    border: 1px solid var(--card-border);
+    transition: transform 0.3s;
+    aspect-ratio: 4/3;
+}
+
+.example-item:hover {
+    transform: scale(1.03);
+    border-color: var(--accent-color);
+}
+
+.example-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* Image Optimization & Layout Fixes */
+#input-preview, .result-media {
+    max-width: 100%;
+    height: auto;
+    border-radius: 12px;
+    display: block;
+    margin: 0 auto;
+}
+
+.preview-area {
+    max-width: 100%;
+    overflow: hidden;
+    border-radius: 12px;
+    border: 1px solid var(--card-border);
+    margin-top: 1rem;
+}
+
+.workspace-card-new img {
+    max-width: 100%;
+    height: auto;
 }

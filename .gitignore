@@ -9,3 +9,23 @@ Desktop.ini
 # Dependency directories
 node_modules/
 bower_components/
+
+# Environment / Config
+.env
+.env.*
+
+# IDE / Agent Specific
+.vscode/
+.gemini/
+clean-code/
+code-review-pro/
+error-handling-patterns/
+prompt-enhancer/
+
+# Database Files (excluding if they are project-critical)
+*.sql
+
+# Demo/Asset images (if not part of the final build)
+demo_*.png
+example_*.png
+test_*.png
